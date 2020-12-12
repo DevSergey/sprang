@@ -7,7 +7,7 @@ describe('workspace-project App', () => {
   });
   it('should display welcome message', () => {
     page.navigateTo();
-    expect(page.getTitleText()).toEqual('Welcome to clientes-app!');
+    expect(page.getTitleText()).toEqual('Welcome to appSpring5Angular!');
   });
   afterEach(async () => {
     const logs = await browser.manage().logs().get(logging.Type.BROWSER);

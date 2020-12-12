@@ -13,7 +13,7 @@ module.exports = function (config) {
       clearContext: false 
     },
     coverageIstanbulReporter: {
-      dir: require('path').join(__dirname, './coverage/clientes-app'),
+      dir: require('path').join(__dirname, './coverage/appSpring5Angular'),
       reports: ['html', 'lcovonly', 'text-summary'],
       fixWebpackSourcePaths: true
     },
