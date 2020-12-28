@@ -6,10 +6,12 @@ import { ClienteService } from './cliente.service';
   templateUrl: './clientes.component.html'
 })
 export class ClientesComponent implements OnInit {
-  clientes: Cliente[] = [];
-  constructor(private ClienteService: ClienteService) {
+  clientes: Cliente[];
+  constructor(private clienteService: ClienteService) {
   }
   ngOnInit() {
-    this.clientes = this.ClienteService.getClientes();
+    this.clienteService.getClientes().subscribe(
+      clientes => this.clientes = clientes
+    );
   }
 }
