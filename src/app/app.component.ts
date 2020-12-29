@@ -4,8 +4,4 @@ import { Component } from '@angular/core';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
-  title: string = 'Bienvenido a Angular';
-  curso: string = 'Curso';
-  profesor: string = 'Spring 5 con Angular';
-}
+export class AppComponent {}
