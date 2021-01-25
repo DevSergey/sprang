@@ -13,8 +13,9 @@ import { Router} from '@angular/router';
   getClientes(): Observable<Cliente[]> {
     return this.http.get<Cliente[]>(this.urlEndPoint);
     }
-    create(cliente: Cliente): Observable<any> {
-      return this.http.post<any>(this.urlEndPoint, cliente, {headers: this.httpHeaders}).pipe(
+    create(cliente: Cliente): Observable<Cliente> {
+      return this.http.post(this.urlEndPoint, cliente, {headers: this.httpHeaders}).pipe(
+        map((response: any) => response.cliente as Cliente),
         catchError(e => {
           console.error(e.error.mensaje);
           swal.fire('Error al crear', e.error.error, 'error');
