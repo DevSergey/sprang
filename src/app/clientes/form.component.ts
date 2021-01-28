@@ -9,7 +9,8 @@ import swal from 'sweetalert2';
 })
 export class FormComponent implements OnInit {
   private cliente: Cliente = new Cliente();
-  private titulo:string = "Crear Cliente";
+  private titulo: string = "Crear Cliente";
+  private errores: string[];
   constructor(
     private clienteService: ClienteService,
     private router: Router,
@@ -34,8 +35,13 @@ export class FormComponent implements OnInit {
         console.log(cliente);
         this.router.navigate(['/clientes'])
         swal.fire('Nuevo Cliente', `El cliente ${cliente.nombre}  ${cliente.apellido} ha sido creado con éxito.`, 'success');
-      }
-      );
+      },
+        err => {
+          this.errores = err.error.errors as string[];
+          console.error(err.error.errors);
+          console.error('Código del error desde el backend: ' + err.status);
+        }
+      )
   }
   update(): void {
     this.clienteService.update(this.cliente)
@@ -44,7 +50,12 @@ export class FormComponent implements OnInit {
         console.log(json.cliente);
         this.router.navigate(['/clientes'])
         swal.fire('Cliente Actualizado', `${json.mensaje}: ${json.cliente.nombre}  ${json.cliente.apellido}`, 'success');
-      }
-      );
+      },
+        err => {
+          this.errores = err.error.errors as string[];
+          console.error(err.error.errors);
+          console.error('Código del error desde el backend: ' + err.status);
+        }
+      )
   }
 }

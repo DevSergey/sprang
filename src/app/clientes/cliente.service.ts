@@ -17,6 +17,10 @@ import { Router} from '@angular/router';
       return this.http.post(this.urlEndPoint, cliente, {headers: this.httpHeaders}).pipe(
         map((response: any) => response.cliente as Cliente),
         catchError(e => {
+          if(e.status==400)
+          {
+            return throwError(e);
+          }
           console.error(e.error.mensaje);
           swal.fire('Error al crear', e.error.error, 'error');
           return throwError(e);
@@ -38,9 +42,13 @@ import { Router} from '@angular/router';
     update(cliente: Cliente): Observable<any> {
       return this.http.put<any>(`${this.urlEndPoint}/${cliente.id}`, cliente, {headers: this.httpHeaders}).pipe(
         catchError(e => {
-            console.error(e.error.mensaje);
-            swal.fire('Error al editar', e.error.error, 'error');
+          if(e.status==400)
+          {
             return throwError(e);
+          }
+          console.error(e.error.mensaje);
+          swal.fire('Error al editar', e.error.error, 'error');
+          return throwError(e);
           }
         )
       )
