@@ -5,13 +5,23 @@ import { HttpClient, HttpHeaders} from '@angular/common/http';
 import { map, catchError} from 'rxjs/operators';
 import swal from 'sweetalert2';
 import { Router} from '@angular/router';
+import {formatDate} from '@angular/common';
 @Injectable()
   export class ClienteService {
   private  urlEndPoint:string = 'http:
   private httpHeaders = new HttpHeaders({'Content-type': 'application/json'});
   constructor(private http: HttpClient, private router: Router) { }
   getClientes(): Observable<Cliente[]> {
-    return this.http.get<Cliente[]>(this.urlEndPoint);
+    return this.http.get<Cliente[]>(this.urlEndPoint).pipe(
+      map(response => {
+        let clientes = response as Cliente[];
+      return clientes.map(cliente => {
+        cliente.nombre = cliente.nombre.toUpperCase();
+        cliente.createAt = formatDate(cliente.createAt, 'dd/MM/yyyy', 'en-US');
+        return cliente;
+      });
+      })
+    );
     }
     create(cliente: Cliente): Observable<Cliente> {
       return this.http.post(this.urlEndPoint, cliente, {headers: this.httpHeaders}).pipe(
