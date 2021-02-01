@@ -5,7 +5,7 @@ import { HttpClient, HttpHeaders} from '@angular/common/http';
 import { map, catchError} from 'rxjs/operators';
 import swal from 'sweetalert2';
 import { Router} from '@angular/router';
-import {formatDate} from '@angular/common';
+import {DatePipe} from '@angular/common';
 @Injectable()
   export class ClienteService {
   private  urlEndPoint:string = 'http:
@@ -17,7 +17,8 @@ import {formatDate} from '@angular/common';
         let clientes = response as Cliente[];
       return clientes.map(cliente => {
         cliente.nombre = cliente.nombre.toUpperCase();
-        cliente.createAt = formatDate(cliente.createAt, 'dd/MM/yyyy', 'en-US');
+        let datePipe = new DatePipe('es');
+        cliente.createAt = datePipe.transform(cliente.createAt, 'EEEE dd, MMMM yyyy');
         return cliente;
       });
       })
