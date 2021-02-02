@@ -17,8 +17,6 @@ import {DatePipe} from '@angular/common';
         let clientes = response as Cliente[];
       return clientes.map(cliente => {
         cliente.nombre = cliente.nombre.toUpperCase();
-        let datePipe = new DatePipe('es');
-        cliente.createAt = datePipe.transform(cliente.createAt, 'EEEE dd, MMMM yyyy');
         return cliente;
       });
       })
