@@ -9,13 +9,9 @@ import swal from 'sweetalert2';
 })
 export class FormComponent implements OnInit {
   private cliente: Cliente = new Cliente();
-  private titulo: string = "Crear Cliente";
+  private titulo: string = 'Crear Cliente';
   private errores: string[];
-  constructor(
-    private clienteService: ClienteService,
-    private router: Router,
-    private activateRoute : ActivatedRoute
-  ) { }
+  constructor(private clienteService: ClienteService, private router: Router, private activateRoute: ActivatedRoute) { }
   ngOnInit() {
     this.cargarCliente()
   }
@@ -23,8 +19,9 @@ export class FormComponent implements OnInit {
     this.activateRoute.params.subscribe(
       params => {
         let id = params['id']
-        if(id){
-          this.clienteService.getCliente(id).subscribe( (cliente) => this.cliente = cliente)
+        if (id)
+        {
+          this.clienteService.getCliente(id).subscribe( (cliente) => this.cliente = cliente);
         }
       }
     )
@@ -48,7 +45,7 @@ export class FormComponent implements OnInit {
       .subscribe(json => {
         console.log(json.mensaje);
         console.log(json.cliente);
-        this.router.navigate(['/clientes'])
+        this.router.navigate(['/clientes']);
         swal.fire('Cliente Actualizado', `${json.mensaje}: ${json.cliente.nombre}  ${json.cliente.apellido}`, 'success');
       },
         err => {

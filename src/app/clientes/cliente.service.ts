@@ -11,31 +11,27 @@ import {DatePipe} from '@angular/common';
   private  urlEndPoint:string = 'http:
   private httpHeaders = new HttpHeaders({'Content-type': 'application/json'});
   constructor(private http: HttpClient, private router: Router) { }
-  getClientes(): Observable<Cliente[]> {
-    return this.http.get<Cliente[]>(this.urlEndPoint).pipe(
-      tap(response => {
-        let clientes = response as Cliente[];
-        console.log('ClienteService: tap 1')
-        response.forEach(cliente => {
+  getClientes(page: number): Observable<any> {
+    return this.http.get<Cliente[]>(this.urlEndPoint + '/page/' + page).pipe(
+      tap((response: any) => {
+        console.log('ClienteService: tap 1');
+        (response.content as Cliente[]).forEach(cliente => {
           console.log(cliente.nombre);
-          }
-        )
+        })
       }),
-      map(response => {
-        let clientes = response as Cliente[];
-        return clientes.map(cliente => {
+      map((response: any) => {
+        (response.content as Cliente[]).map(cliente => {
           cliente.nombre = cliente.nombre.toUpperCase();
           return cliente;
-          }
-        );
+        });
+        return response;
       }),
-      tap(response => {
-        console.log('ClienteService: tap 2 con map')
-        response.forEach(cliente => {
+      tap((response: any) => {
+        console.log('ClienteService: tap 2 con map');
+        (response.content as Cliente[]).forEach(cliente => {
             console.log(cliente.nombre);
-          }
-        )
-      }),
+        });
+      })
     );
     }
     create(cliente: Cliente): Observable<Cliente> {
