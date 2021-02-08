@@ -2,6 +2,7 @@
   <div class="card-header">Clientes</div>
   <div class="card-body text-primary">
     <h5 class="card-title">Listado de Clientes</h5>
+    <paginator-nav></paginator-nav>
   <div class="my-2 text-left">
     <button class="btn btn-rounded btn-primary" type="button" [routerLink]="['form']">Crear Cliente</button>
   </div>
@@ -36,5 +37,6 @@
     <div *ngIf="clientes?.length == 0" class="alert alert-danger">
       No hay registros en la base de datos.
     </div>
+    <paginator-nav></paginator-nav>
   </div>
 </div>
