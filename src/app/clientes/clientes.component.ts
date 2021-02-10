@@ -10,6 +10,7 @@ import { ActivatedRoute} from '@angular/router';
 })
 export class ClientesComponent implements OnInit {
   clientes: Cliente[];
+  paginator: any;
   constructor(private clienteService: ClienteService, private activatedRoute: ActivatedRoute) {  }
   ngOnInit() {
     this.activatedRoute.paramMap.subscribe( params => {
@@ -17,14 +18,17 @@ export class ClientesComponent implements OnInit {
       if (!page) {
         page = 0;
       }
-      this.clienteService.getClientes(page).pipe(
-        tap((response: any) => {
-          console.log('ClientesComponent: tap 3');
-          (response.content as Cliente[]).forEach(cliente => console.log(cliente.nombre));
-        })
-      ).subscribe(response => this.clientes = response.content);
-    }
-    );
+      this.clienteService.getClientes(page)
+        .pipe(
+          tap((response: any) => {
+            console.log('ClientesComponent: tap 3');
+            (response.content as Cliente[]).forEach(cliente => console.log(cliente.nombre));
+          })
+        ).subscribe(response => {
+          this.clientes = response.content as Cliente[];
+          this.paginator = response;
+        });
+    });
   }
   delete(cliente: Cliente): void {
     swal.fire({
@@ -39,14 +43,13 @@ export class ClientesComponent implements OnInit {
       if (result.value) {
         this.clienteService.delete(cliente.id).subscribe(
           response => {
-            this.clientes = this.clientes.filter(cli =>cli !== cliente)
+            this.clientes = this.clientes.filter(cli => cli !== cliente)
             swal.fire(
               'Borrado!',
               'Tu cliente ha sido eliminado.',
               'success'
             )
-          }
-        )
+          });
       }
     })
   }
