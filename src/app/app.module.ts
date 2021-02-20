@@ -1,4 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { LOCALE_ID, NgModule} from '@angular/core';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
@@ -11,9 +12,10 @@ import { HomeComponent } from './home/home.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormComponent } from './clientes/form.component';
 import { FormsModule} from '@angular/forms';
-import {registerLocaleData} from '@angular/common';
+import { registerLocaleData} from '@angular/common';
 import localeES from '@angular/common/locales/es';
 import { PaginatorComponent } from './paginator/paginator.component';
+import { MatDatepickerModule, MatNativeDateModule} from '@angular/material';
 registerLocaleData(localeES, 'es');
 const routes: Routes = [
   {path: '', redirectTo: '/home', pathMatch: 'full'},
@@ -33,13 +35,17 @@ const routes: Routes = [
     ClientesComponent,
     HomeComponent,
     FormComponent,
+    BrowserAnimationsModule,
     PaginatorComponent
   ],
   imports: [
     BrowserModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     HttpClientModule,
     FormsModule,
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes),
+    BrowserAnimationsModule
   ],
   providers: [
     ClienteService,
