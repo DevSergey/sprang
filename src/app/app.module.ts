@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { LOCALE_ID, NgModule} from '@angular/core';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
@@ -35,17 +35,16 @@ const routes: Routes = [
     ClientesComponent,
     HomeComponent,
     FormComponent,
-    BrowserAnimationsModule,
     PaginatorComponent
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     MatDatepickerModule,
     MatNativeDateModule,
     HttpClientModule,
     FormsModule,
-    RouterModule.forRoot(routes),
-    BrowserAnimationsModule
+    RouterModule.forRoot(routes)
   ],
   providers: [
     ClienteService,
