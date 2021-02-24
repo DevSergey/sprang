@@ -17,7 +17,7 @@ import {DatePipe} from '@angular/common';
         console.log('ClienteService: tap 1');
         (response.content as Cliente[]).forEach(cliente => {
           console.log(cliente.nombre);
-        })
+        });
       }),
       map((response: any) => {
         (response.content as Cliente[]).map(cliente => {
@@ -45,9 +45,8 @@ import {DatePipe} from '@angular/common';
           console.error(e.error.mensaje);
           swal.fire('Error al crear', e.error.error, 'error');
           return throwError(e);
-         }
-        )
-      )
+         })
+      );
     }
     getCliente(id): Observable<Cliente> {
       return this.http.get<Cliente>(`${this.urlEndPoint}/${id}`).pipe(
@@ -56,23 +55,20 @@ import {DatePipe} from '@angular/common';
           console.error(e.error.mensaje);
           swal.fire('Error al editar', e.error.mensaje, 'error');
           return throwError(e);
-          }
-        )
-      )
+          })
+      );
     }
     update(cliente: Cliente): Observable<any> {
       return this.http.put<any>(`${this.urlEndPoint}/${cliente.id}`, cliente, {headers: this.httpHeaders}).pipe(
         catchError(e => {
-          if(e.status==400)
-          {
+          if(e.status==400) {
             return throwError(e);
           }
           console.error(e.error.mensaje);
           swal.fire('Error al editar', e.error.error, 'error');
           return throwError(e);
-          }
-        )
-      )
+          })
+      );
     }
     delete(id: number): Observable<Cliente> {
       return this.http.delete<Cliente>(`${this.urlEndPoint}/${id}`, {headers: this.httpHeaders}).pipe(
@@ -80,8 +76,20 @@ import {DatePipe} from '@angular/common';
             console.error(e.error.mensaje);
             swal.fire('Error al eliminar', e.error.error, 'error');
             return throwError(e);
-          }
-        )
-      )
+          })
+      );
+    }
+    subirFoto(archivo: File, id): Observable<Cliente> {
+      let formData = new FormData();
+      formData.append("archivo", archivo);
+      formData.append("id", id);
+      return this.http.post(`${this.urlEndPoint}/upload`, formData).pipe(
+        map((response: any) => response.cliente as Cliente),
+        catchError(e => {
+          console.error(e.error.mensaje);
+          swal.fire('Error al subir la foto ', e.error.error, 'error');
+          return throwError(e);
+        })
+      );
     }
   }
