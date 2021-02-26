@@ -14,7 +14,7 @@
               <div class="custom-file">
                 <input (change)="seleccionarFoto($event)" type="file" class="custom-file-input" id="inputGroupFile04"><label class="custom-file-label" for="inputGroupFile04">Subir foto</label></div>
               <div class="input-group-append">
-                <button (click)="subirFoto()" class="btn btn-outline-secondary" type="button">Upload</button></div>
+                <button (click)="subirFoto()" [disabled]="!fotoSeleccionada" class="btn btn-outline-secondary" type="button">Upload</button></div>
             </div>
           </div>
           <div class="col-sm">
