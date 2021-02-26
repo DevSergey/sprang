@@ -9,7 +9,7 @@
     <table class="table table-bordered table-striped" *ngIf="clientes?.length>0">
       <thead>
           <tr>
-            <th>ID</th>
+            <th>#</th>
             <th>Nombre</th>
             <th>Apellido</th>
             <th>Email</th>
@@ -20,7 +20,12 @@
       </thead>
       <tbody>
         <tr *ngFor="let cliente of clientes">
-          <td><button (click)="abrirModal(cliente)" class="btn btn-success">{{ cliente.id }}</button></td>
+          <td>
+            <img (click)="abrirModal(cliente)" *ngIf="cliente?.foto" src="http://localhost:8080/api/uploads/img/{{cliente.foto}}"
+                 alt="{{cliente.foto}}" class="img-thumbnail rounded" style="width: 64px; cursor: pointer">
+            <img (click)="abrirModal(cliente)" *ngIf="!cliente?.foto" src="http://localhost:8080/images/noUsuario.png"
+                 alt="Sin Foto" class="img-thumbnail rounded" style="width: 64px; cursor: pointer">
+          </td>
           <td>{{ cliente.nombre}}</td>
           <td>{{ cliente.apellido | uppercase}}</td>
           <td>{{ cliente.email}}</td>
