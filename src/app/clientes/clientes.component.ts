@@ -11,6 +11,7 @@ import { ActivatedRoute} from '@angular/router';
 export class ClientesComponent implements OnInit {
   clientes: Cliente[];
   paginator: any;
+  clienteSeleccionado: Cliente;
   constructor(private clienteService: ClienteService, private activatedRoute: ActivatedRoute) {  }
   ngOnInit() {
     this.activatedRoute.paramMap.subscribe( params => {
@@ -44,13 +45,12 @@ export class ClientesComponent implements OnInit {
         this.clienteService.delete(cliente.id).subscribe(
           response => {
             this.clientes = this.clientes.filter(cli => cli !== cliente)
-            swal.fire(
-              'Borrado!',
-              'Tu cliente ha sido eliminado.',
-              'success'
-            )
+            swal.fire('Borrado!','Tu cliente ha sido eliminado.','success')
           });
       }
-    })
+    });
+  }
+  abrirModal(cliente: Cliente) {
+    this.clienteSeleccionado = cliente;
   }
 }

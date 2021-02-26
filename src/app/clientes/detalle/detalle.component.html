@@ -16,7 +16,7 @@
               <div class="input-group-append">
                 <button (click)="subirFoto()" [disabled]="!fotoSeleccionada" class="btn btn-outline-secondary" type="button">Upload</button></div>
             </div>
-            <div *ngIf="progreso > 0" class="progress mt-3">
+            <div *ngIf="progreso > 0" class="progress mt-3" style="height: 40px">
               <div class="progress-bar progress-bar-striped" role="progressbar" [ngStyle]="{width:progreso+'%'}" aria-valuenow="10" attr.aria-valuemin="{{progreso}}" aria-valuemax="100">
                 {{progreso}}%
               </div>
