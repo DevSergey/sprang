@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { Cliente } from '../cliente';
-import { ClienteService } from '../cliente.service';
+import {Component, OnInit} from '@angular/core';
+import {Cliente} from '../cliente';
+import {ClienteService} from '../cliente.service';
 import {ActivatedRoute} from '@angular/router';
 import swal from 'sweetalert2';
+import {HttpEventType} from '@angular/common/http';
 @Component({
   selector: 'detalle-cliente',
   templateUrl: './detalle.component.html',
@@ -12,6 +13,7 @@ export class DetalleComponent implements OnInit {
   cliente: Cliente;
   titulo: string = "Detalle del cliente";
   private fotoSeleccionada: File;
+  progreso: number;
   constructor(private clienteService: ClienteService,
               private activatedRoute: ActivatedRoute) { }
   ngOnInit() {
@@ -26,19 +28,25 @@ export class DetalleComponent implements OnInit {
   }
   seleccionarFoto(event){
       this.fotoSeleccionada = event.target.files[0];
+      this.progreso = 0;
       console.log(this.fotoSeleccionada);
-      if(this.fotoSeleccionada.type.indexOf('image') < 0){
+      if (this.fotoSeleccionada.type.indexOf('image') < 0) {
         swal.fire('Error Selección:', 'Debe ser de tipo foto', 'error');
         this.fotoSeleccionada = null;
       }
   }
-  subirFoto(){
-    if(!this.fotoSeleccionada){
+  subirFoto() {
+    if (!this.fotoSeleccionada) {
       swal.fire('Error Upload:', 'Debe seleccionar una foto', 'error');
-    }else{
-    this.clienteService.subirFoto(this.fotoSeleccionada, this.cliente.id).subscribe(cliente => {
-        this.cliente = cliente;
-        swal.fire('La foto se ha subido correctamente!', `La foto se ha subido correctamente: ${this.cliente.foto}`, 'success');
+    } else {
+    this.clienteService.subirFoto(this.fotoSeleccionada, this.cliente.id).subscribe(event => {
+        if (event.type === HttpEventType.UploadProgress) {
+          this.progreso = Math.round(event.loaded / event.total * 100);
+        } else if (event.type === HttpEventType.Response) {
+          let response: any = event.body;
+          this.cliente = response.cliente as Cliente;
+          swal.fire('La foto se ha subido correctamente!', response.mensaje, 'success');
+        }
       });
     }
   }
