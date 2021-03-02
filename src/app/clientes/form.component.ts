@@ -15,7 +15,7 @@ export class FormComponent implements OnInit {
   ngOnInit() {
     this.cargarCliente()
   }
-  cargarCliente(): void{
+  cargarCliente(): void {
     this.activateRoute.params.subscribe(
       params => {
         let id = params['id']
@@ -23,8 +23,7 @@ export class FormComponent implements OnInit {
         {
           this.clienteService.getCliente(id).subscribe( (cliente) => this.cliente = cliente);
         }
-      }
-    )
+      });
   }
   create(): void {
     this.clienteService.create(this.cliente)
@@ -37,8 +36,7 @@ export class FormComponent implements OnInit {
           this.errores = err.error.errors as string[];
           console.error(err.error.errors);
           console.error('Código del error desde el backend: ' + err.status);
-        }
-      )
+        });
   }
   update(): void {
     this.clienteService.update(this.cliente)
@@ -52,7 +50,6 @@ export class FormComponent implements OnInit {
           this.errores = err.error.errors as string[];
           console.error(err.error.errors);
           console.error('Código del error desde el backend: ' + err.status);
-        }
-      )
+        });
   }
 }
