@@ -17,7 +17,9 @@
       </li>
     </ul>
     <ul class="navbar-nav navbar-right">
-      <li><a [routerLink]="['/login']" class="btn btn-outline-primary">Sign In</a></li>
+      <li *ngIf="!authService.isAuthenticated()"><a [routerLink]="['/login']" class="btn btn-outline-primary">Sign In</a></li>
+      <li *ngIf="authService.isAuthenticated()" class="mt-2">{{authService.usuario.nombre}}</li>
+      <li *ngIf="authService.isAuthenticated()"><button (click)="logout()" class="ml-3 btn btn-outline-primary" type="submit">Sign Out</button></li>
     </ul>
   </div>
 </nav>
