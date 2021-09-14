@@ -24,6 +24,9 @@ import {AuthService} from '../usuarios/auth.service';
   }
   private isNoAutorizado(e): boolean {
     if (e.status === 401) {
+      if (this.authService.isAuthenticated()) {
+        this.authService.logout();
+      }
       this.router.navigate(['/login']);
       return true;
     }
