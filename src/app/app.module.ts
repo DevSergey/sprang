@@ -18,6 +18,7 @@ import { PaginatorComponent } from './paginator/paginator.component';
 import { MatDatepickerModule, MatNativeDateModule} from '@angular/material';
 import { DetalleComponent } from './clientes/detalle/detalle.component';
 import { LoginComponent } from './usuarios/login.component';
+import {AuthGuard} from './usuarios/guards/auth.guard';
 registerLocaleData(localeES, 'es');
 const routes: Routes = [
   {path: '', redirectTo: '/home', pathMatch: 'full'},
@@ -25,8 +26,8 @@ const routes: Routes = [
   {path: 'directivas', component: DirectivaComponent},
   {path: 'clientes', component: ClientesComponent},
   {path: 'clientes/page/:page', component: ClientesComponent},
-  {path: 'clientes/form', component: FormComponent},
-  {path: 'clientes/form/:id', component: FormComponent},
+  {path: 'clientes/form', component: FormComponent, canActivate:[AuthGuard]},
+  {path: 'clientes/form/:id', component: FormComponent, canActivate:[AuthGuard]},
   {path: 'login', component: LoginComponent}
   ];
 @NgModule({
