@@ -1,39 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Cliente } from './cliente';
 import { Observable, of, throwError} from 'rxjs';
-import {HttpClient, HttpEvent, HttpHeaders, HttpRequest} from '@angular/common/http';
+import {HttpClient, HttpEvent,  HttpRequest} from '@angular/common/http';
 import { map, catchError, tap} from 'rxjs/operators';
-import swal from 'sweetalert2';
 import { Router} from '@angular/router';
 import {Region} from './region';
-import {AuthService} from '../usuarios/auth.service';
 @Injectable()
   export class ClienteService {
-  private  urlEndPoint:string = 'http:
+  private  urlEndPoint: string = 'http:
   constructor(private http: HttpClient,
-              private router: Router,
-              private authService: AuthService) { }
-  private isNoAutorizado(e): boolean {
-    if (e.status === 401) {
-      if (this.authService.isAuthenticated()) {
-        this.authService.logout();
-      }
-      this.router.navigate(['/login']);
-      return true;
-    }
-    if (e.status === 403) {
-      swal.fire('Acceso Denegado', `Hola ${this.authService.usuario.username} no tienes acceso a este recurso.`, 'warning' );
-      this.router.navigate(['/login']);
-      return true;
-    }
-    return false;
-  }
+              private router: Router) { }
   getRegiones(): Observable<Region[]> {
-    return this.http.get<Region[]>(this.urlEndPoint + '/regiones').pipe(
-      catchError(e => {
-        this.isNoAutorizado(e);
-        return throwError(e);
-      }));
+    return this.http.get<Region[]>(this.urlEndPoint + '/regiones');
   }
   getClientes(page: number): Observable<any> {
     return this.http.get<Cliente[]>(this.urlEndPoint + '/page/' + page).pipe(
@@ -61,14 +39,12 @@ import {AuthService} from '../usuarios/auth.service';
       return this.http.post(this.urlEndPoint, cliente).pipe(
         map((response: any) => response.cliente as Cliente),
         catchError(e => {
-          if(this.isNoAutorizado(e)) {
-            return throwError(e);
-          }
           if (e.status === 400) {
             return throwError(e);
           }
-          console.error(e.error.mensaje);
-          swal.fire('Error al crear', e.error.error, 'error');
+          if (e.error.mensaje) {
+            console.error(e.error.mensaje);
+          }
           return throwError(e);
          })
       );
@@ -76,12 +52,10 @@ import {AuthService} from '../usuarios/auth.service';
     getCliente(id): Observable<Cliente> {
       return this.http.get<Cliente>(`${this.urlEndPoint}/${id}`).pipe(
         catchError(e => {
-          if(this.isNoAutorizado(e)) {
-            return throwError(e);
+          if (e.status !== 401 && e.error.mensaje) {
+            this.router.navigate(['/clientes']);
+            console.error(e.error.mensaje);
           }
-          this.router.navigate(['/clientes']);
-          console.error(e.error.mensaje);
-          swal.fire('Error al editar', e.error.mensaje, 'error');
           return throwError(e);
           })
       );
@@ -89,14 +63,12 @@ import {AuthService} from '../usuarios/auth.service';
     update(cliente: Cliente): Observable<any> {
       return this.http.put<any>(`${this.urlEndPoint}/${cliente.id}`, cliente).pipe(
         catchError(e => {
-          if (this.isNoAutorizado(e)) {
-            return throwError(e);
-          }
           if (e.status === 400) {
             return throwError(e);
           }
-          console.error(e.error.mensaje);
-          swal.fire('Error al editar', e.error.error, 'error');
+          if (e.error.mensaje) {
+            console.error(e.error.mensaje);
+          }
           return throwError(e);
           })
       );
@@ -104,11 +76,9 @@ import {AuthService} from '../usuarios/auth.service';
     delete(id: number): Observable<Cliente> {
       return this.http.delete<Cliente>(`${this.urlEndPoint}/${id}`).pipe(
         catchError(e => {
-          if (this.isNoAutorizado(e)) {
-            return throwError(e);
+          if (e.error.mensaje) {
+            console.error(e.error.mensaje);
           }
-          console.error(e.error.mensaje);
-          swal.fire('Error al eliminar', e.error.error, 'error');
           return throwError(e);
         })
       );
@@ -120,9 +90,6 @@ import {AuthService} from '../usuarios/auth.service';
       const req = new HttpRequest('POST', `${this.urlEndPoint}/upload`, formData, {
         reportProgress: true
       });
-      return this.http.request(req).pipe(catchError(e => {
-        this.isNoAutorizado(e);
-        return throwError(e);
-      }));
+      return this.http.request(req);
     }
   }
